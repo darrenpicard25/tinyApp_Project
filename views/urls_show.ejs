@@ -16,6 +16,12 @@
       <h3><%=longURL%></h3>
       <p><%=shortURL%></p>
     <br>
+
+    <form method='POST' action= <%='/edit/'+ shortURL %> >
+      <label> URL: </label>
+      <input type="url" name="newURL" value =<%=longURL %> placeholder="Enter new URL.......">
+      <button type='submit'>Submit changes</button>
+    </form>
     <a href="/urls">Go to main page</a>
 
 </body>

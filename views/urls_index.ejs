@@ -15,11 +15,20 @@
     <a href="urls/new">Click to Create New Tiny URL</a>
     <br><br>
     <h3>My URLs:</h3>
-    <ol>
+    <table>
       <% for (let key in urls) { %>
-      <li><%= `Short URL: ${key} ---> ${urls[key]}` %></li>
+      <tr>
+        <form method="post" action = "/urls/delete">
+         <td><%= `Short URL: ${key} --->`%></td>
+        <td><a href=<%=`/url/${key}` %> ><%=`${urls[key]}`%></a></td>
+        <td><span>&nbsp&nbsp&nbsp&nbsp</span></td>
+          <td><a href = <%='/urls/'+key%> >Edit</a></td>
+          <td> &nbsp&nbsp&nbsp&nbsp   </td>
+        <td><button type="submit" name=id value=<%=key%>>Delete</button></td>
+      </form>
+      <br/>
+    </tr>
    <% } %>
-    </ol>
-
+    </table>
 </body>
 </html>
