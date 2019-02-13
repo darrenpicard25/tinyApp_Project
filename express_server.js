@@ -1,8 +1,13 @@
-let express = require('express');
-let app = express();
-let PORT = 8080; //this is default port
-
+const express = require('express');
+const app = express();
+const PORT = 8080; //this is default port
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
+
+function generateRandomString() {
+
+}
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -39,6 +44,10 @@ app.get("/urls/:shortURL", (req, res) => {
   };
   console.log(templateVars);
   res.render("urls_show", templateVars);
+});
+
+app.post("/urls", (req, res) => {
+    console.log(req.body.longURL);
 });
 
 
