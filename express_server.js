@@ -27,6 +27,11 @@ app.get("/urls" , (req, res) => {
   res.render("urls_index", templateData);
 });
 
+app.get("/urls/new", (req, res) => {
+  let templateData = { urls: urlDatabase};
+  res.render("urls_new", templateData);
+});
+
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
