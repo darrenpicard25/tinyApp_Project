@@ -17,12 +17,14 @@ function generateRandomString() {
   return output;
 }
 function doesEmailAlreadyExist (checkEmail) {
+  let userID;
   for (const id in users) {
+    userID =id;
     if (users[id].email === checkEmail) {
-      return false;
+      return userID;
     }
   }
-  return true;
+  return '';
 }
 //Our Data
 var urlDatabase = {
@@ -51,7 +53,7 @@ app.post('/register', (req, res) => {
   const email = req.body.email;
   const id = doesEmailAlreadyExist(email);
   const password = req.body.password;
-  if (email && password && id) {
+  if (email && password && !id) {
     users[id] = {
       id,
       email,
@@ -101,9 +103,11 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  if (doesEmailAlreadyExist(email)) {
-
-    };
+  const id = doesEmailAlreadyExist(email);
+  console.log(email);
+  console.log(password);
+  console.log(id);
+  if (id && email === users[id].email && users[id].password === password) {
     res.cookie('user_id', id);
     res.redirect('/urls');
   } else {
@@ -113,7 +117,7 @@ app.post('/login', (req, res) => {
 
 
 app.post('/logout', (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect('/urls');
 });
 
