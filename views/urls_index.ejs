@@ -10,10 +10,11 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
+    <h1>Tiny App</h1>
+    <a href="urls">URLS</a><span> | </span><a href="urls/new">Click to Create New Tiny URL</a>
     <%- include("./partials/_header.ejs") %>
     <br>
-    <a href="urls/new">Click to Create New Tiny URL</a>
-    <br><br>
+    <br>
     <h3>My URLs:</h3>
     <table>
       <% for (let key in urls) { %>

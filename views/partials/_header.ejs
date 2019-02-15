@@ -1,5 +1,7 @@
+<head>
+<title>Tiny App</title>
+</head>
 <header>
-  <h1>Tiny URL App</h1>
     <% if(username) { %>
 
     <form  method="POST" action="/logout">
@@ -9,8 +11,8 @@
 
 
     <% } else { %>
-
-    <a href="/login">Login</a> <a href = "/register">Register</a>
-
+   <p>
+    <a href="/login">Login</a><span> | </span> <a href = "/register">Register</a>
+   </p>
     <% } %>
 </header>

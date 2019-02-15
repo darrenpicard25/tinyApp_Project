@@ -45,15 +45,17 @@ app.get('/error', (req, res) => {
 });
 //Root Page But not set up
 app.get("/register", (req, res) => {
-  let templateData = { urls: urlDatabase, username: users};
-  res.render('urls_register');
+  let templateData = { urls: urlDatabase, username: users[req.cookies.user_id]};
+  res.render('urls_register', templateData);
 });
 
 app.post('/register', (req, res) => {
   const email = req.body.email;
-  const id = doesEmailAlreadyExist(email);
+  let id = doesEmailAlreadyExist(email);
   const password = req.body.password;
+
   if (email && password && !id) {
+    id = generateRandomString();
     users[id] = {
       id,
       email,
@@ -97,16 +99,14 @@ app.post("/urls", (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('ulrs_login');
+  let templateData = { urls: urlDatabase, username: users[req.cookies.user_id]};
+  res.render('ulrs_login', templateData);
 });
 
 app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const id = doesEmailAlreadyExist(email);
-  console.log(email);
-  console.log(password);
-  console.log(id);
   if (id && email === users[id].email && users[id].password === password) {
     res.cookie('user_id', id);
     res.redirect('/urls');
