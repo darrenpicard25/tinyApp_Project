@@ -26,10 +26,19 @@ function doesEmailAlreadyExist (checkEmail) {
   }
   return '';
 }
+function urlsForUser(id) {
+  outputURLs = {};
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userID === id) {
+      outputURLs[url] = urlDatabase[url].longURL;
+    }
+  }
+  return outputURLs;
+}
 //Our Data
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: 'darren' },
+  "9sm5xK": { longURL: "http://www.google.com", userID: 'darren'}
 };
 
 let users = {
@@ -67,14 +76,29 @@ app.post('/register', (req, res) => {
     res.redirect('/error');
   }
 });
+
+app.get("/" , (req, res) => {
+    let templateData = {
+    urls: urlDatabase,
+    username: users[req.cookies.user_id]
+  };
+  if (users[req.cookies.user_id]) {
+    res.render("/urls",templateVars);
+  } else {
+    res.redirect("/login");
+  }
+});
 //Main urls Page
 app.get("/urls" , (req, res) => {
-  let templateData = { urls: urlDatabase, username: users[req.cookies.user_id]};
+  let templateData = { urls: urlsForUser(req.cookies.user_id) , username: users[req.cookies.user_id]};
   res.render("urls_index", templateData);
 });
 
 app.post("/urls/delete", (req, res) => {
-  delete urlDatabase[req.body.id];
+  let key = req.body.id;
+  if (urlDatabase[key].userID === req.cookies.user_id) {
+    delete urlDatabase[req.body.id];
+  }
   res.redirect("/urls");
 });
 
@@ -84,22 +108,23 @@ app.get("/urls.json", (req, res) => {
 });
 //Page with form to add new URL
 app.get("/urls/new", (req, res) => {
-  let templateData = {
-    urls: urlDatabase,
-    username: users[req.cookies.user_id]
-  };
-  res.render("urls_new", templateData);
+  let templateData = { urls: urlsForUser(req.cookies.user_id) , username: users[req.cookies.user_id]};
+  if (users[req.cookies.user_id]) {
+    res.render("urls_new",templateData);
+  } else {
+    res.redirect("/login");
+  }
 });
 //Post to page from the form
 app.post("/urls", (req, res) => {
     let shortURL = generateRandomString();
     let longURL = req.body.longURL;
-    urlDatabase[shortURL] = longURL;
+    urlDatabase[shortURL] = { longURL: longURL, userID: req.cookies.user_id};
     res.redirect(`urls`);
 });
 
 app.get('/login', (req, res) => {
-  let templateData = { urls: urlDatabase, username: users[req.cookies.user_id]};
+  let templateData = { urls: urlsForUser(req.cookies.user_id) , username: users[req.cookies.user_id]};
   res.render('ulrs_login', templateData);
 });
 
@@ -123,23 +148,27 @@ app.post('/logout', (req, res) => {
 
 //Look at details of each URL
 app.get("/urls/:shortURL", (req, res) => {
+    let templateData = {
+      urls: urlsForUser(req.cookies.user_id) ,
+      username: users[req.cookies.user_id]};
+
   let templateVars = {
     shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL],
+    longURL: urlDatabase[req.params.shortURL].longURL,
     username: users[req.cookies.user_id]  };
   res.render("urls_show", templateVars);
 });
 
 app.post('/edit/:id' , (req, res) => {
-  id =req.params.id;
+  shortURL =req.params.id;
   newURL =req.body.newURL;
-  urlDatabase[id] = newURL;
+  urlDatabase[shortURL] = {longURL: newURL, userID: req.cookies.user_id};
   res.redirect('/urls');
 });
 
 //Redirect to actual Page
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  res.redirect(urlDatabase[req.params.shortURL].longURL);
 });
 
 

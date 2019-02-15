@@ -3,7 +3,7 @@
 </head>
 <header>
     <% if(username) { %>
-
+    <a href="/urls">URLS</a><span> | </span><a href="urls/new">Click to Create New Tiny URL</a>
     <form  method="POST" action="/logout">
     <p><%='You are logged in as: ' + username.email%>&nbsp&nbsp&nbsp&nbsp</p>
     <button type="submit">Logout</button>

@@ -11,24 +11,26 @@
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
     <h1>Tiny App</h1>
-    <a href="urls">URLS</a><span> | </span><a href="urls/new">Click to Create New Tiny URL</a>
     <%- include("./partials/_header.ejs") %>
     <br>
     <br>
     <h3>My URLs:</h3>
     <table>
+     <% if (!username) { %>
+     <p>Please log into account or Register to see URL's</p>
+     <% } else { %>
       <% for (let key in urls) { %>
       <tr>
         <form method="post" action = "/urls/delete">
          <td><%= `Short URL: ${key} --->`%></td>
-        <td><a href=<%=`/url/${key}` %> ><%=`${urls[key]}`%></a></td>
+        <td><a href=<%=`/u/${key}` %> ><%=`${urls[key]}`%></a></td>
         <td><span>&nbsp&nbsp&nbsp&nbsp</span></td>
           <td><a href = <%='/urls/'+key%> >Edit</a></td>
           <td> &nbsp&nbsp&nbsp&nbsp   </td>
         <td><button type="submit" name=id value=<%=key%>>Delete</button></td>
       </form>
     </tr>
-   <% } %>
+   <% } } %>
     </table>
 </body>
 </html>

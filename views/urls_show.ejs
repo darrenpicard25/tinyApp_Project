@@ -11,19 +11,20 @@
 <body style="font-size:20px; padding:50px;">
     <!-- Add EJS code here -->
     <h1>Tiny App</h1>
-    <a href="/urls">URLS</a><span> | </span><a href="urls/new">Click to Create New Tiny URL</a>
 
        <%- include("./partials/_header.ejs") %>
     <br>
-      <h3><%=longURL%></h3>
+      <h3><a href=<%=`/u/${shortURL}`%>><%=longURL%></a></h3>
       <p><%=shortURL%></p>
     <br>
-
+    <% if (username) { %>
     <form method='POST' action= <%='/edit/'+ shortURL %> >
       <label> URL: </label>
       <input type="url" name="newURL" value =<%=longURL %> placeholder="Enter new URL.......">
       <button type='submit'>Submit changes</button>
     </form>
+
+    <% } %>
     <a href="/urls">Go to main page</a>
 
 </body>
