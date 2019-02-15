@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; //this is default port
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
@@ -40,12 +41,13 @@ var urlDatabase = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: 'darren' },
   "9sm5xK": { longURL: "http://www.google.com", userID: 'darren'}
 };
+let tempPassword = bcrypt.hashSync('hello',10);
 
 let users = {
   darren : {
     id: 'darren',
     email: 'darrenpicard25@gmail.com',
-    password: 'hello'
+    password: tempPassword
   }
 };
 
@@ -61,7 +63,7 @@ app.get("/register", (req, res) => {
 app.post('/register', (req, res) => {
   const email = req.body.email;
   let id = doesEmailAlreadyExist(email);
-  const password = req.body.password;
+  const password = bcrypt.hashSync(req.body.password, 10);
 
   if (email && password && !id) {
     id = generateRandomString();
@@ -132,7 +134,7 @@ app.post('/login', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const id = doesEmailAlreadyExist(email);
-  if (id && email === users[id].email && users[id].password === password) {
+  if (id && email === users[id].email && bcrypt.compareSync(password, users[id].password)) {
     res.cookie('user_id', id);
     res.redirect('/urls');
   } else {
