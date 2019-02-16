@@ -25,9 +25,9 @@
          <td><%= `Short URL: ${key} --->`%></td>
         <td><a href=<%=`/u/${key}` %> ><%=`${urls[key]}`%></a></td>
         <td><span>&nbsp&nbsp&nbsp&nbsp</span></td>
-          <td><a href = <%='/urls/'+key%> >Edit</a></td>
+          <td><a href = <%='/urls/'+key%> class="btn btn-info">Edit</a></td>
           <td> &nbsp&nbsp&nbsp&nbsp   </td>
-        <td><button type="submit" name=id value=<%=key%> class="btn btn-primary" >Delete</button></td>
+        <td><button type="submit" name=id value=<%=key%> class="btn btn-danger" >Delete</button></td>
       </form>
     </tr>
    <% } } %>
